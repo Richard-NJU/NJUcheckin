@@ -34,7 +34,7 @@ jobs:
           username: ${{ secrets.MAILUSERNAME }}
           password: ${{ secrets.MAILPASSWORD }}
           subject: Checkin Log
-          body:  ${{join(steps.run.outputs.*, '\n')}}
+          body:  file://email.txt
           to: ${{ secrets.RECEIVERMAILUSERNAME }}
           from: GitHub Actions
           content_type: text/html
