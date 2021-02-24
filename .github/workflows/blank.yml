@@ -2,9 +2,9 @@
 
 name: NJUcheckin
 
-on:
-  schedule:
-    - cron: '35 00 * * *'
+on: push
+#   schedule:
+#     - cron: '35 00 * * *'
 
 jobs:
   build:
