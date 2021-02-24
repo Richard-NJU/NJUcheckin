@@ -106,8 +106,7 @@ if __name__ == "__main__":
     if not USERNAME or not PASSWORD:
         print("请正确配置用户名和密码！")
         sys.exit()
-    try：
-
+    try:
         bot = Njuer(USERNAME, PASSWORD)
         bot.login()
         bot.checkin()
