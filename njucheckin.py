@@ -96,11 +96,14 @@ class Njuer:
         link = link.format(wid=str(hisInfo['wid']), curr_location=str(hisInfo['hisLoc']) + info)
         res = self.session.get(link)
         res = json.loads(res.text)
+        f = open("email.txt", "w")       
         if res['code'] == '0':
             if res['msg'] == '成功':
-                print('打卡成功')
+                f.write("打卡成功！")
+                f.close()
                 return 1
-        print('打卡失败')
+        f.write("打卡失败请检查action")
+        f.close()
         return 0
 
 if __name__ == "__main__":
