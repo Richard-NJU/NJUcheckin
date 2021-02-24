@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.8'
       - name: Prepare environment
-        run: pip install beautifulsoup4 lxml requests copy json re urllib PyExecJs http
+        run: pip install beautifulsoup4 lxml requests json re urllib PyExecJs http
       - name: Run app
         run: python njucheckin.py
         env:
