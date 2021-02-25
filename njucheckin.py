@@ -116,5 +116,8 @@ if __name__ == "__main__":
         bot.checkin()
         
     except Exception as e:
+        f = open("email.txt", "w") 
+        f.write("打卡失败，请手动打卡", str(e))
         print("打卡失败，请手动打卡", str(e))
+        f.close()
 
