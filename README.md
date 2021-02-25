@@ -17,7 +17,7 @@
   - PASSWORD:密码
   - RECEIVERMAILUSERNAME:接收邮件的邮箱
   - MAILUSERNAME:发送邮件的163邮箱
-  - MAILPASSWORD:发送邮件的163地址
+  - MAILPASSWORD:发送邮件的163邮箱的密码
 - 在 Actions 页面，开启 Workflows
   - 选择 NJUcheckin, enable
 

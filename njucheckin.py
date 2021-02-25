@@ -52,7 +52,6 @@ class Njuer:
         pattern = re.compile(r"var pwdDefaultEncryptSalt = (.*?);", re.MULTILINE | re.DOTALL)
         script = str(soup.find("script", text=pattern))
         pwdDefaultEncryptSalt = re.search('pwdDefaultEncryptSalt = "(.*?)";', script).group(1)
-        print(pwdDefaultEncryptSalt)
         loginInfo = {
             'username': USERNAME,
             'password': self.exec_js_func(JSFILE, 'encryptAES', PASSWORD, pwdDefaultEncryptSalt),
@@ -63,7 +62,6 @@ class Njuer:
             '_eventId': info["_eventId"],
             'rmShown': info["rmShown"]
         }
-        print(loginInfo)
         data = urllib.parse.urlencode(loginInfo)
         headers = copy.deepcopy(HEADERS)
         headers.update({
@@ -100,9 +98,11 @@ class Njuer:
         if res['code'] == '0':
             if res['msg'] == '成功':
                 f.write("打卡成功！")
+                print("打卡成功！")
                 f.close()
                 return 1
         f.write("打卡失败请检查action")
+        print("打卡失败")
         f.close()
         return 0
 
@@ -116,5 +116,8 @@ if __name__ == "__main__":
         bot.checkin()
         
     except Exception as e:
+        f = open("email.txt", "w") 
+        f.write("打卡失败，请手动打卡", str(e))
         print("打卡失败，请手动打卡", str(e))
+        f.close()
 
