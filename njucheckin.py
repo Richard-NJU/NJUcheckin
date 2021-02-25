@@ -24,7 +24,7 @@ HEADERS = {
 
 def notify(meg):
     with open('email.txt','a+') as f:
-        f.write(msg,'\n')
+        f.write(msg+'\n')
     return
 
 class Njuer:
