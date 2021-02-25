@@ -14,15 +14,15 @@ USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
 checkinUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html"
 hisUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do"
-loginUrl="https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
+loginUrl= "https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
 
-UserAgent=   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
+UserAgent= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
 
 HEADERS = {
     'User-Agent': UserAgent
 }
 
-def notify(meg):
+def notify(msg):
     with open('email.txt','a+') as f:
         f.write(msg+'\n')
     return
@@ -40,8 +40,7 @@ class Njuer:
             "username": USERNAME,
             "password": PASSWORD,
         }
-        checkinUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html"
-        hisUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do"
+
         loginUrl = "https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
 
         self.session.headers["User-Agent"] = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Mobile Safari/537.36"
@@ -79,9 +78,8 @@ class Njuer:
     def checkLogin(self):
         res = self.session.get(hisUrl)
         try:
-            res = json.loads(self.session.get(hisUrl).text)
-            print(res)
-            if res['code'] == 0:
+            test = json.loads(res.text)
+            if test['code'] == '0':
                 print('登录成功')
                 notify('登录成功')
         except Exception as e:
