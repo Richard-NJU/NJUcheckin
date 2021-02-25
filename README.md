@@ -14,7 +14,7 @@
 - fork 本代码库
 - 配置 Setting-Secrets 添加
   - USERNAME:学号
-  - PASSWORD:密码
+  - PASSWORD:统一身份认证密码
   - RECEIVERMAILUSERNAME:接收邮件的邮箱
   - MAILUSERNAME:发送邮件的163邮箱
   - MAILPASSWORD:发送邮件的163邮箱的密码

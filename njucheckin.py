@@ -22,6 +22,10 @@ HEADERS = {
     'User-Agent': UserAgent
 }
 
+def notify(meg):
+    with open('email.txt','a+') as f:
+        f.write(msg,'\n')
+    return
 
 class Njuer:
 
@@ -72,6 +76,20 @@ class Njuer:
         self.session.post(loginUrl, data=data, headers=headers)
         return
 
+    def checkLogin(self):
+        res = self.session.get(hisUrl)
+        try:
+            res = json.loads(self.session.get(hisUrl).text)
+            print(res)
+            if res['code'] == 0:
+                print('登录成功')
+                notify('登录成功')
+        except Exception as e:
+            msg = '登录失败,请检查密码'+str(e)
+            print(msg)
+            notify(msg)
+        return
+
     def exec_js_func(self, js_file, func, *params):
         with open(js_file, 'r') as f:
             lines = f.readlines()
@@ -81,6 +99,7 @@ class Njuer:
         return result
 
     def getCheckInfo(self):
+        checkLogin()
         res = self.session.get(hisUrl)
         resJson = json.loads(res.text)
         wid = resJson['data'][0]['WID']
@@ -93,17 +112,16 @@ class Njuer:
         hisInfo = self.getCheckInfo()
         link = link.format(wid=str(hisInfo['wid']), curr_location=str(hisInfo['hisLoc']) + info)
         res = self.session.get(link)
-        res = json.loads(res.text)
-        f = open("email.txt", "w")       
+        res = json.loads(res.text)  
         if res['code'] == '0':
             if res['msg'] == '成功':
+                f = open("email.txt", "w")
                 f.write("打卡成功！")
                 print("打卡成功！")
                 f.close()
                 return 1
-        f.write("打卡失败请检查action")
+        notify('打卡失败')
         print("打卡失败")
-        f.close()
         return 0
 
 if __name__ == "__main__":
@@ -116,8 +134,7 @@ if __name__ == "__main__":
         bot.checkin()
         
     except Exception as e:
-        f = open("email.txt", "w") 
-        f.write("打卡失败，请手动打卡", str(e))
-        print("打卡失败，请手动打卡", str(e))
-        f.close()
+        msg = "打卡失败，请手动打卡"+ str(e)
+        notify(msg)
+        print(msg)
 

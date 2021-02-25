@@ -3,8 +3,12 @@
 name: NJUcheckin
 
 on:
+  [
+    push,
     schedule:
-    - cron: '00 03 * * *'
+    - cron: '01 00 * * *'
+  ]
+
 
 jobs:
   build:
