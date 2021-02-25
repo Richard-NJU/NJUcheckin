@@ -101,7 +101,7 @@ class Njuer:
         res = self.session.get(hisUrl)
         resJson = json.loads(res.text)
         wid = resJson['data'][0]['WID']
-        hisLoc =resJson['data'][1]['CURR_LOCATION']
+        hisLoc =resJson['data'][1]["CURR_LOCATION"]
         return {'hisLoc':hisLoc,'wid':wid}
 
     def checkin(self):
