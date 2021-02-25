@@ -4,7 +4,7 @@ name: NJUcheckin
 
 on: 
    schedule:
-   - cron: '10 02 * * *'
+   - cron: '20 02 * * *'
 
 jobs:
   build:
