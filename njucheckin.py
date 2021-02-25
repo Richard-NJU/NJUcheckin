@@ -14,14 +14,18 @@ USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
 checkinUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html"
 hisUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do"
-loginUrl="https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
+loginUrl= "https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
 
-UserAgent=   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
+UserAgent= "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36"
 
 HEADERS = {
     'User-Agent': UserAgent
 }
 
+def notify(msg):
+    with open('email.txt','a+') as f:
+        f.write(msg+'\n')
+    return
 
 class Njuer:
 
@@ -36,8 +40,7 @@ class Njuer:
             "username": USERNAME,
             "password": PASSWORD,
         }
-        checkinUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html"
-        hisUrl = "http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do"
+
         loginUrl = "https://authserver.nju.edu.cn/authserver/login?service=http%3A%2F%2Fehallapp.nju.edu.cn%2Fxgfw%2Fsys%2Fyqfxmrjkdkappnju%2Fapply%2FgetApplyInfoList.do"
 
         self.session.headers["User-Agent"] = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Mobile Safari/537.36"
@@ -72,6 +75,19 @@ class Njuer:
         self.session.post(loginUrl, data=data, headers=headers)
         return
 
+    def checkLogin(self):
+        res = self.session.get(hisUrl)
+        try:
+            test = json.loads(res.text)
+            if test['code'] == '0':
+                print('登录成功')
+                notify('登录成功')
+        except Exception as e:
+            msg = '登录失败,请检查密码'+str(e)
+            print(msg)
+            notify(msg)
+        return
+
     def exec_js_func(self, js_file, func, *params):
         with open(js_file, 'r') as f:
             lines = f.readlines()
@@ -81,6 +97,7 @@ class Njuer:
         return result
 
     def getCheckInfo(self):
+        self.checkLogin()
         res = self.session.get(hisUrl)
         resJson = json.loads(res.text)
         wid = resJson['data'][0]['WID']
@@ -93,17 +110,16 @@ class Njuer:
         hisInfo = self.getCheckInfo()
         link = link.format(wid=str(hisInfo['wid']), curr_location=str(hisInfo['hisLoc']) + info)
         res = self.session.get(link)
-        res = json.loads(res.text)
-        f = open("email.txt", "w")       
+        res = json.loads(res.text)  
         if res['code'] == '0':
             if res['msg'] == '成功':
+                f = open("email.txt", "w")
                 f.write("打卡成功！")
                 print("打卡成功！")
                 f.close()
                 return 1
-        f.write("打卡失败请检查action")
+        notify('打卡失败')
         print("打卡失败")
-        f.close()
         return 0
 
 if __name__ == "__main__":
@@ -116,8 +132,7 @@ if __name__ == "__main__":
         bot.checkin()
         
     except Exception as e:
-        f = open("email.txt", "w") 
-        f.write("打卡失败，请手动打卡", str(e))
-        print("打卡失败，请手动打卡", str(e))
-        f.close()
+        msg = "打卡失败，请手动打卡"+ str(e)
+        notify(msg)
+        print(msg)
 
