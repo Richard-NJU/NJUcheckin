@@ -99,7 +99,7 @@ class Njuer:
         return result
 
     def getCheckInfo(self):
-        checkLogin()
+        self.checkLogin()
         res = self.session.get(hisUrl)
         resJson = json.loads(res.text)
         wid = resJson['data'][0]['WID']
